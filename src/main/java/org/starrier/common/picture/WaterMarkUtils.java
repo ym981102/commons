@@ -1,8 +1,5 @@
 package org.starrier.common.picture;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -49,10 +46,9 @@ public class WaterMarkUtils {
             // 水印结束
             graphics.dispose();
 
+            String formatName = pressTargetImage.substring(pressTargetImage.lastIndexOf(".") + 1);
             FileOutputStream fileOutputStream = new FileOutputStream(pressTargetImage);
-            JPEGImageEncoder jpegImageEncoder = JPEGCodec.createJPEGEncoder(fileOutputStream);
-
-            jpegImageEncoder.encode(bufferedImage);
+            ImageIO.write(bufferedImage, /*"GIF"*/ formatName /* format desired */ , new File(pressTargetImage) /* target */ );
             fileOutputStream.close();
 
         } catch (IOException e) {
@@ -61,7 +57,7 @@ public class WaterMarkUtils {
     }
 
 
-    public static void pressText(String pressTex, String targetImage, String fontName, Integer fontStyle,
+    public static void pressText(String pressText, String targetImage, String fontName, Integer fontStyle,
                                  Color color, Integer fontSize, Integer x, Integer y) {
         try {
             File file = new File(targetImage);
@@ -75,13 +71,13 @@ public class WaterMarkUtils {
             graphics.drawImage(image, 0, 0, width, height, null);
             graphics.setColor(color);
             graphics.setFont(new Font(fontName, fontStyle, fontSize));
-            graphics.drawString(pressTex, x, y);
+            graphics.drawString(pressText, x, y);
 
             graphics.dispose();
 
+            String formatName = targetImage.substring(targetImage.lastIndexOf(".") + 1);
             FileOutputStream fileOutputStream = new FileOutputStream(targetImage);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fileOutputStream);
-            encoder.encode(bufferedImage);
+            ImageIO.write(bufferedImage, /*"GIF"*/ formatName /* format desired */ , new File(pressText) /* target */ );
             fileOutputStream.close();
         } catch (Exception e) {
 
